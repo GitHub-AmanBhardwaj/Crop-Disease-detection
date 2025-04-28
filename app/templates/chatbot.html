@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Gardner 🌱</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .chat-messages {
+            width: 100%;
+            padding: 20px 0;
+            overflow-y: auto;
+            height: calc(100vh - 200px);
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--light-color);
+            border-radius: 3px;
+        }
+
+        .welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .welcome-message p {
+            font-size: 16px;
+            font-weight: 400;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.bot {
+            text-align: left;
+        }
+
+        .message-text {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.4;
+            box-shadow: var(--shadow);
+            background-color: white;
+        }
+
+        .user .message-text {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 10px;
+        }
+
+        .bot .message-text {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border-radius: 10px 10px 10px 0;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px 0;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            position: fixed;
+            bottom: 10px;
+            background-color: #f5f7fa;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            font-size: 14px;
+            box-shadow: var(--shadow);
+            background: white;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .chat-input button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .example-prompts {
+            padding: 5px 0;
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            position: fixed;
+            bottom: 60px;
+            background-color: #f5f7fa;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .example-prompts button {
+            margin: 5px;
+            padding: 8px 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            box-shadow: var(--shadow);
+        }
+
+        .example-prompts button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .loading span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin: 0 2px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: grow 1.2s infinite ease-in-out;
+        }
+
+        .loading span:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .loading span:nth-child(3) {
+            animation-delay: 0.8s;
+        }   
+
+
+        @keyframes grow {
+            0%, 40%, 100% { transform: scale(0); }
+            20% { transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .chat-messages {
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .chat-input,
+            .example-prompts {
+                width: 90%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-message {
+                font-size: 20px;
+            }
+
+            .welcome-message p {
+                font-size: 14px;
+            }
+
+            .chat-messages {
+                width: 95%;
+            }
+
+            .chat-input,
+            .example-prompts {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-seedling"></i>
+                    CropPredict
+                </a>
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/bot">Chatbot</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-message" id="welcome-message">
+                <h2>Chat with Gardner 🌱</h2>
+                <p>Welcome! Ask me anything about gardening or crops.</p>
+            </div>
+        </div>
+        <div class="loading" id="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="example-prompts">
+            <button onclick="sendExamplePrompt('How to grow tomatoes with a tomato at home?')">🍅 Grow Tomatoes</button>
+            <button onclick="sendExamplePrompt('What are the best fertilizers for plants?')">🌿 Fertilizers</button>
+            <button onclick="sendExamplePrompt('How to prevent plant diseases?')">🛡️ Prevent Diseases</button>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const chatMessages = document.getElementById('chat-messages');
+            const loading = document.getElementById('loading');
+            const welcomeMessage = document.getElementById('welcome-message');
+
+            if (userInput.value.trim() === "") return;
+
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'none';
+            }
+
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('message', 'user');
+            userMessage.innerHTML = `<div class="message-text">${userInput.value}</div>`;
+            chatMessages.appendChild(userMessage);
+
+            const message = userInput.value;
+            userInput.value = '';
+
+            loading.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                const botMessage = document.createElement('div');
+                botMessage.classList.add('message', 'bot');
+                botMessage.innerHTML = `<div class="message-text">${data.response}</div>`;
+                chatMessages.appendChild(botMessage);
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (error) {
+                console.error('Error:', error);
+                const errorMessage = document.createElement('div');
+                errorMessage.classList.add('message', 'bot');
+                errorMessage.innerHTML = `<div class="message-text">Sorry, I encountered an error. Please try again.</div>`;
+                chatMessages.appendChild(errorMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function sendExamplePrompt(prompt) {
+            document.getElementById('user-input').value = prompt;
+            sendMessage();
+        }
+
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialPrompt = urlParams.get('prompt');
+            if (initialPrompt) {
+                document.getElementById('user-input').value = decodeURIComponent(initialPrompt);
+                sendMessage();
+            }
+        };
+    </script>
+</body>
+</html>

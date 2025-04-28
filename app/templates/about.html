@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About CropPredict</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .hero {
+            padding: 3rem 0;
+            text-align: center;
+            background-color: white;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .content-text {
+            padding: 1rem;
+        }
+
+        .content-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 300px;
+        }
+
+        .content-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .content-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .chatbot-button {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .chatbot-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .chatbot-button i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-image {
+                height: 250px;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0;
+                padding: 0.75rem 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .section h2 {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .hero {
+                padding: 2rem 0;
+            }
+
+            .section h2 {
+                font-size: 1.4rem;
+            }
+
+            .content-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-seedling"></i>
+                    CropPredict
+                </a>
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/bot">Chatbot</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>About CropPredict</h1>
+            <p>An academic project leveraging AI to detect crop diseases and support agricultural research</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="section">
+            <h2>Project Overview</h2>
+            <div class="content-grid">
+                <div class="content-text">
+                    <p>CropPredict is an academic project developed to explore the application of artificial intelligence in agriculture. The project focuses on detecting diseases in crops such as apples, corn, grapes, potatoes, strawberries, and tomatoes using deep learning techniques.</p>
+                    <p>By analyzing leaf images, CropPredict aims to provide accurate disease identification, supporting agricultural research and education. The project includes a web interface for image uploads and a chatbot for interactive guidance on disease management, demonstrating the potential of AI in addressing agricultural challenges.</p>
+                </div>
+                <div class="content-image">
+                    <img src="static/img/farm.jpg" alt="Crop field for disease detection research">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Technical Approach</h2>
+            <div class="content-grid">
+                <div class="content-image">
+                    <img src="static/img/ai.jpg" alt="AI model visualization">
+                </div>
+                <div class="content-text">
+                    <p>CropPredict utilizes convolutional neural networks (CNNs), specifically MobileNetV2 and EfficientNetB3, trained on a dataset of leaf images for crops like apples, corn, and tomatoes. The models classify diseases such as Tomato___Late_blight and Apple___healthy with high accuracy.</p>
+                    <p>The dataset includes thousands of labeled images, enabling robust training and evaluation. The web application, built with Flask, processes image uploads and integrates with a chatbot powered by AI to provide insights on disease prevention and management, showcasing a practical AI pipeline for agriculture.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Future Goals</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Expand Dataset</h3>
+                    <p>Incorporate more crops and disease types to enhance model robustness and applicability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Improve Models</h3>
+                    <p>Explore advanced architectures and transfer learning to boost detection accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Educational Outreach</h3>
+                    <p>Share findings with academic communities to promote AI in agricultural research.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="chatbot-button" onclick="window.location.href='/bot';">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 CropPredict. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function initializeMenu() {
+            const menuToggle = document.getElementById('mobile-menu');
+            const navLinks = document.getElementById('nav-links');
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                console.log('Mobile menu toggled');
+            });
+        }
+
+        function highlightCurrentPage() {
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.href === window.location.href) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing components');
+            initializeMenu();
+            highlightCurrentPage();
+        });
+    </script>
+</body>
+</html>

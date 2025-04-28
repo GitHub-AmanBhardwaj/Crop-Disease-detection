@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropPredict - AI Plant Disease Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upload-form {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .upload-form.dragover {
+            box-shadow: 0 15px 35px rgba(67, 97, 238, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--primary-color);
+            border-radius: 10px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            background-color: rgba(67, 97, 238, 0.03);
+        }
+
+        .drop-zone:hover {
+            border-color: var(--secondary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--accent-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .drop-zone p {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .drop-zone .file-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin: 1.5rem auto;
+            display: none;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .drop-zone .status-message {
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        .drop-zone .status-message.success {
+            color: var(--success-color);
+        }
+
+        .drop-zone .status-message.error {
+            color: var(--error-color);
+        }
+
+        .upload-form input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-btn:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .upload-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .upload-btn .btn-loader {
+            display: none;
+            position: absolute;
+            top: 45%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .upload-btn.loading {
+            color: transparent;
+        }
+
+        .upload-btn.loading .btn-loader {
+            display: block;
+        }
+
+        .browse-btn {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .browse-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .clear-btn {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        .prevention-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1.5rem auto;
+            display: block;
+            max-width: 250px;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(72, 149, 239, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prevention-btn:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 149, 239, 0.4);
+        }
+
+        .prevention-btn .btn-loader {
+            display: none;
+            position: absolute;
+            top: 35%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .prevention-btn.loading {
+            color: transparent;
+        }
+
+        .prevention-btn.loading .btn-loader {
+            display: block;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-overlay .loader {
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--primary-color);
+            border-top: 6px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-overlay .loading-message {
+            color: white;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            text-align: center;
+            margin: 2.5rem 0;
+        }
+
+        .results h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .results p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .prevention-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
+        .prevention-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .prevention-container h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .prevention-container p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .prevention-container ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .prevention-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-message {
+            color: var(--error-color);
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .note {
+            text-align: center;
+            color: #666;
+            margin: 2.5rem 0;
+            font-size: 1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+        }
+
+        .note p:first-child {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 3rem;
+        }
+
+        .chatbot-button {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            width: 65px;
+            height: 65px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .chatbot-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .chatbot-button i {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0;
+                padding: 0.75rem 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .upload-form {
+                padding: 1.5rem;
+            }
+
+            .drop-zone {
+                padding: 1.5rem;
+            }
+
+            .prevention-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .upload-form {
+                padding: 1.25rem;
+            }
+
+            .drop-zone {
+                padding: 1.25rem;
+            }
+
+            .prevention-btn {
+                max-width: 100%;
+                padding: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-seedling"></i>
+                    CropPredict
+                </a>
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/bot">Chatbot</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content container">
+        <div class="page-header">
+            <h1>AI Plant Disease Detection | MobileNet-V2</h1>
+            <p>Upload an image of a plant leaf to detect potential diseases using our advanced AI technology</p>
+        </div>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="upload-form" id="uploadFormContainer">
+                <div class="drop-zone" id="dropZone" role="region" aria-label="File upload drop zone">
+                    <p id="dropZoneText">Drag & Drop Your Image Here</p>
+                    <p>or</p>
+                    <label for="file-upload" class="browse-btn">Browse Files</label>
+                    <input id="file-upload" name="file" type="file" accept="image/png,image/jpeg,image/jpg,image/gif" aria-label="Select image file">
+                    <img id="filePreview" class="file-preview" alt="Selected file preview">
+                    <p id="statusMessage" class="status-message"></p>
+                    <button type="button" id="clearBtn" class="clear-btn" style="display: none;">Clear File</button>
+                </div>
+                <button type="submit" class="upload-btn" id="analyzeBtn" disabled>
+                    <span>Analyze Image</span>
+                    <div class="btn-loader"></div>
+                </button>
+            </div>
+        </form>
+
+        <div id="resultsContainer">
+            {% if image_path %}
+            <div class="results">
+                <h3>Analysis Results</h3>
+                <p>{{ name }}</p>
+                {% if not is_healthy %}
+                <button class="prevention-btn" id="prevention-btn" data-disease="{{ disease_name }}">
+                    <span>Prevention and Cure</span>
+                    <div class="btn-loader"></div>
+                </button>
+                <div class="prevention-container" id="prevention-container">
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if error %}
+            <p class="error-message">{{ error }}</p>
+            {% endif %}
+        </div>
+
+        <div class="note">
+            <p><b>Note:</b> This model is trained to detect diseases in the following crops:</p>
+            <p>Apple • Corn • Grapes • Potato • Strawberry • Tomato</p>
+        </div>
+    </main>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <p class="loading-message">Analyzing image...</p>
+    </div>
+
+    <div class="chatbot-button" onclick="window.location.href='/bot';">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 CropPredict. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function initializeForm() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('file-upload');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadFormContainer = document.getElementById('uploadFormContainer');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const dropZoneText = document.getElementById('dropZoneText');
+            const filePreview = document.getElementById('filePreview');
+            const statusMessage = document.getElementById('statusMessage');
+            const clearBtn = document.getElementById('clearBtn');
+
+            const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+
+            const endpoint = window.location.pathname === '/predict1' ? '/predict1' : '/predict2';
+            console.log(`Using endpoint: ${endpoint}`);
+
+            function resetForm() {
+                console.log('Resetting form');
+                fileInput.value = '';
+                fileInput.disabled = false;
+                filePreview.src = '';
+                filePreview.style.display = 'none';
+                dropZoneText.textContent = 'Drag & Drop Your Image Here';
+                statusMessage.textContent = '';
+                clearBtn.style.display = 'none';
+                analyzeBtn.disabled = true;
+            }
+
+            function showStatusMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = `status-message ${type}`;
+            }
+
+            function handleFile(file) {
+                console.log(`Selected file: ${file.name}, Type: ${file.type}, Size: ${file.size} bytes`);
+                if (!ALLOWED_TYPES.includes(file.type)) {
+                    showStatusMessage('Invalid file type. Please upload PNG, JPG, JPEG, or GIF.', 'error');
+                    resetForm();
+                    return;
+                }
+                if (file.size > 16 * 1024 * 1024) {
+                    showStatusMessage('File too large. Maximum size is 16MB.', 'error');
+                    resetForm();
+                    return;
+                }
+
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    filePreview.src = e.target.result;
+                    filePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+                showStatusMessage(`File selected: ${file.name}`, 'success');
+                clearBtn.style.display = 'inline-block';
+                analyzeBtn.disabled = false;
+            }
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+                dropZoneText.textContent = 'Drop your file here!';
+                console.log('Dragover event triggered');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+                dropZoneText.textContent = 'Drag & Drop Your Image Here';
+                console.log('Dragleave event triggered');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                dropZoneText.textContent = 'Drag & Drop Your Image Here';
+                console.log('Drop event triggered');
+
+                const files = e.dataTransfer.files;
+                if (files.length > 1) {
+                    showStatusMessage('Please drop only one file.', 'error');
+                    return;
+                }
+                if (files.length === 1) {
+                    handleFile(files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', () => {
+                console.log('File input change event triggered');
+                if (fileInput.files.length) {
+                    handleFile(fileInput.files[0]);
+                } else {
+                    resetForm();
+                }
+            });
+
+            clearBtn.addEventListener('click', () => {
+                console.log('Clear button clicked');
+                resetForm();
+            });
+
+            uploadForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('Form submission triggered');
+
+                if (!fileInput.files.length) {
+                    showStatusMessage('Please select an image file first.', 'error');
+                    console.log('No file selected for submission');
+                    return;
+                }
+
+                const selectedFile = fileInput.files[0];
+                console.log(`Submitting file: ${selectedFile.name}, Size: ${selectedFile.size} bytes`);
+
+                analyzeBtn.classList.add('loading');
+                loadingOverlay.classList.add('active');
+                analyzeBtn.disabled = true;
+
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                for (let [key, value] of formData.entries()) {
+                    console.log(`FormData entry: ${key} = ${value.name || value}`);
+                }
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    loadingOverlay.classList.remove('active');
+                    analyzeBtn.classList.remove('loading');
+
+                    if (response.ok) {
+                        const text = await response.text();
+                        console.log('Response received, reloading page');
+                        document.open();
+                        document.write(text);
+                        document.close();
+                    } else {
+                        const errorData = await response.json();
+                        resultsContainer.innerHTML = `<p class="error-message">${errorData.error}</p>`;
+                        console.log(`Error response: ${errorData.error}`);
+                        resetForm();
+                    }
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    loadingOverlay.classList.remove('active');
+                    analyzeBtn.classList.remove('loading');
+                    resultsContainer.innerHTML = `<p class="error-message">Error: Failed to connect to the server</p>`;
+                    resetForm();
+                }
+            });
+
+            resetForm();
+        }
+
+        function initializeMenu() {
+            const menuToggle = document.getElementById('mobile-menu');
+            const navLinks = document.getElementById('nav-links');
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                console.log('Mobile menu toggled');
+            });
+        }
+
+        function attachPreventionButtonListener() {
+            const preventionBtn = document.getElementById('prevention-btn');
+            const preventionContainer = document.getElementById('prevention-container');
+            
+            if (preventionBtn && preventionContainer) {
+                console.log('Prevention button found, attaching listener');
+                
+                preventionBtn.addEventListener('click', async () => {
+                    preventionBtn.classList.add('loading');
+                    
+                    const diseaseName = preventionBtn.dataset.disease;
+                    console.log(`Fetching prevention for: ${diseaseName}`);
+                    
+                    try {
+                        const response = await fetch('/get_prevention_cure', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ disease_name: diseaseName })
+                        });
+
+                        preventionBtn.classList.remove('loading');
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+
+                            const preventionContent = `
+                                <h4>Prevention and Cure for ${diseaseName}</h4>
+                                <div class="gemini-response">${data.gemini_response}</div>
+                            `;
+
+                            preventionContainer.innerHTML = preventionContent;
+                            preventionContainer.classList.add('active');
+                            
+                            console.log('Prevention content displayed');
+                        } else {
+                            const errorData = await response.json();
+                            preventionContainer.innerHTML = `<p class="error-message">${errorData.error}</p>`;
+                            preventionContainer.classList.add('active');
+                            console.log(`Prevention error: ${errorData.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Prevention fetch error:', error);
+                        preventionBtn.classList.remove('loading');
+                        preventionContainer.innerHTML = `<p class="error-message">Error: Failed to fetch prevention and cure</p>`;
+                        preventionContainer.classList.add('active');
+                    }
+                });
+            } else {
+                console.log('No prevention button found (likely healthy crop or no prediction)');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing components');
+            initializeMenu();
+            initializeForm();
+            attachPreventionButtonListener();
+        });
+    </script>
+</body>
+</html>
