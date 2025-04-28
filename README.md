@@ -40,13 +40,13 @@ CropPredict/
 ├── app/
 │   ├── app.py                     # Flask application
 │   ├── static/
-│   │   ├── img/                   # Images (e.g., crop-field.jpg, ai-model.jpg)
+│   │   ├── img/                   # Images
 │   │   ├── uploads/               # Directory for uploaded images
 │   ├── templates/
 │   │   ├── predict1.html           # Prediction page template
 │   │   ├── predict2.html           # Prediction page template
 │   │   ├── about.html             # About page template
-│   │   ├── bot.html               # Chatbot page template
+│   │   ├── chatbot.html               # Chatbot page template
 ├── data/
 │   ├── dataset/                   # Dataset of leaf images (not included, see notes)
 ├── requirements.txt               # Python dependencies
