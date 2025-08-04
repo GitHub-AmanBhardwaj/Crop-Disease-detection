@@ -104,8 +104,8 @@ Crop-Disease-detection/
 │   ├── best_disease_model.keras          # Trained MobileNetV2 model
 │   └── best_disease_model_b3.keras       # Trained EfficientNetB3 model
 ├── notebooks/
-│   ├── MobileNetV2_Training.ipynb        # MobileNetV2 training & evaluation
-│   └── EfficientNetB3_Training.ipynb     # EfficientNetB3 training & evaluation
+│   ├── mobilenetv2.ipynb        # MobileNetV2 training & evaluation
+│   └── efficientnetb3.ipynb     # EfficientNetB3 training & evaluation
 ├── flask_app/
 │   ├── app.py                            # Flask web application
 │   ├── templates/                        # HTML templates
