@@ -1,261 +1,265 @@
-# CropPredict: AI-Powered Crop Disease Detection
+# Hybrid Edge-Cloud Crop Disease Diagnosis: MobileNetV2 and EfficientNetB3 for On-Device Detection with Generative AI Integration
 
-CropPredict is an academic project that leverages deep learning to detect diseases in crops using leaf images. The project focuses on six crops—Apple, Corn, Grapes, Potato, Strawberry, and Tomato—and employs convolutional neural networks (CNNs) like MobileNetV2 and EfficientNetB3. A Flask-based web application provides an interface for uploading images and viewing predictions, while a chatbot offers insights on disease prevention and management. This repository contains the model code, Flask app, and HTML templates for the CropPredict platform.
+[
+[
+[![Flask](https://img.shields.io/badge/Flask-2.0+-greenerview
 
-## Table of Contents
+This repository contains the implementation of a **Hybrid Edge-Cloud Crop Disease Diagnosis System** that combines the efficiency of on-device inference with the accuracy of cloud-based processing. The system uses **MobileNetV2** for lightweight edge detection and **EfficientNetB3** for high-accuracy cloud processing, integrated with **Google's Gemini API** for personalized treatment recommendations.
 
-- Project Overview
-- Features
-- Repository Structure
-- Prerequisites
-- Installation
-- Model Training
-- Running the Flask App
-- Usage
-- Templates
-- Contributing
-- License
-- Acknowledgements
+### 🎯 Key Features
 
-## Project Overview
+- **Hybrid Architecture**: Combines edge computing (MobileNetV2) with cloud processing (EfficientNetB3)
+- **High Accuracy**: EfficientNetB3 achieves 96.56% test accuracy, MobileNetV2 achieves 93.54%
+- **27 Disease Classes**: Covers 6 major crops (Apple, Corn, Grape, Potato, Strawberry, Tomato)
+- **AI-Powered Recommendations**: Integration with Google Gemini API for treatment advice
+- **Web Interface**: Real-time Flask-based web application
+- **Production Ready**: Complete deployment pipeline with model optimization
 
-CropPredict is developed to explore the application of AI in agriculture, specifically for detecting crop diseases through image analysis. The project uses a dataset of leaf images to train CNN models, achieving high accuracy in classifying diseases such as Tomato___Late_blight and Apple___healthy. The web app, built with Flask, allows users to upload leaf images for prediction and interact with a chatbot for disease management advice. The project aims to support agricultural research and education by demonstrating AI’s potential in crop health monitoring.
+## 🌱 Dataset
 
-## Features
+**PlantVillage Dataset Subset**
+- **Total Images**: 32,962 colored leaf images
+- **Classes**: 27 disease and healthy categories
+- **Crops**: Apple, Corn, Grape, Potato, Strawberry, Tomato
+- **Split**: 64% Training, 16% Validation, 20% Testing
+- **Resolution**: 224×224 (MobileNetV2), 300×300 (EfficientNetB3)
 
-- **Disease Detection**: Classifies diseases in six crops using MobileNetV2 and EfficientNetB3 models.
-- **Web Interface**: Upload leaf images via a drag-and-drop interface and view prediction results.
-- **Chatbot**: Provides AI-driven suggestions for disease prevention and management.
-- **Responsive Design**: Templates (`predict.html`, `about.html`) are mobile-friendly with consistent navigation.
-- **Academic Focus**: Emphasizes research-oriented goals, including dataset expansion and model improvement.
+## 🏗️ Model Architectures
 
-## Repository Structure
+### MobileNetV2 (Edge Model)
+- **Input**: 224×224×3 RGB images
+- **Base**: Pre-trained ImageNet weights (frozen)
+- **Custom Layers**: Global Average Pooling → Dense(512) → Dropout(0.5) → Dense(27)
+- **Parameters**: 2.93M (669K trainable)
+- **Training**: 50 epochs, batch size 32
+
+### EfficientNetB3 (Cloud Model)
+- **Input**: 300×300×3 RGB images
+- **Base**: Pre-trained ImageNet weights with fine-tuning (last 30 layers)
+- **Custom Layers**: Global Average Pooling → Dense(1024) → Dense(512) → Dense(27)
+- **Parameters**: 12.90M (2.12M+ trainable)
+- **Training**: 25 epochs + 10 fine-tuning epochs, batch size 32
+
+## 📊 Results
+
+| Model | Test Accuracy | Validation Accuracy | Test Loss | Weighted F1-Score |
+|-------|---------------|---------------------|-----------|-------------------|
+| MobileNetV2 | 93.54% | 93.42% | 0.1980 | 0.9356 |
+| EfficientNetB3 | 96.56% | 96.25% | 0.1029 | 0.9659 |
+
+## 🚀 Installation
+
+### Prerequisites
+- Python 3.8+
+- TensorFlow 2.x
+- Flask
+- Google Gemini API Key
+
+### Setup
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/GitHub-AmanBhardwaj/Crop-Disease-detection.git
+cd Crop-Disease-detection
+```
+
+2. **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+3. **Set up environment variables**
+```bash
+export GEMINI_API_KEY="your_gemini_api_key_here"
+```
+
+4. **Download pre-trained models** (Available in `models/` directory)
+   - `best_disease_model.keras` (MobileNetV2)
+   - `best_disease_model_b3.keras` (EfficientNetB3)
+
+## 💻 Usage
+
+### Training Models
+
+1. **Train MobileNetV2**
+```bash
+python train_mobilenet.py
+```
+
+2. **Train EfficientNetB3**
+```bash
+python train_efficientnet.py
+```
+
+### Running the Web Application
+
+```bash
+python app.py
+```
+
+Access the application at `http://localhost:5000`
+
+### Using the Hybrid System
+
+```python
+from src.hybrid_inference import HybridClassifier
+
+# Initialize the hybrid classifier
+classifier = HybridClassifier(
+    mobilenet_path="models/best_disease_model.keras",
+    efficientnet_path="models/best_disease_model_b3.keras",
+    confidence_threshold=0.8
+)
+
+# Classify an image
+result = classifier.predict("path/to/leaf_image.jpg")
+print(f"Disease: {result['disease']}")
+print(f"Confidence: {result['confidence']}")
+print(f"Recommendations: {result['recommendations']}")
+```
+
+## 📁 Repository Structure
 
 ```
-CropPredict/
-├── models/
-│   ├── train_model.py              # Script to train MobileNetV2 and EfficientNetB3 models
-│   ├── best_disease_model.keras    # Pre-trained MobileNetV2 model
-│   ├── best_disease_model_b3.keras # Pre-trained EfficientNetB3 model
-├── app/
-│   ├── app.py                     # Flask application
-│   ├── static/
-│   │   ├── img/                   # Images
-│   │   ├── uploads/               # Directory for uploaded images
-│   ├── templates/
-│   │   ├── predict1.html           # Prediction page template
-│   │   ├── predict2.html           # Prediction page template
-│   │   ├── about.html             # About page template
-│   │   ├── chatbot.html               # Chatbot page template
+Crop-Disease-detection/
 ├── data/
-│   ├── dataset/                   # Dataset of leaf images (not included, see notes)
-├── requirements.txt               # Python dependencies
-├── README.md                      # This file
-├── LICENSE                        # License file
+│   ├── train/
+│   ├── validation/
+│   └── test/
+├── models/
+│   ├── best_disease_model.keras
+│   ├── best_disease_model_b3.keras
+│   └── model_configs/
+├── notebooks/
+│   ├── MobileNetV2_Training.ipynb
+│   ├── EfficientNetB3_Training.ipynb
+│   └── Data_Analysis.ipynb
+├── src/
+│   ├── data_preprocessing.py
+│   ├── train_mobilenet.py
+│   ├── train_efficientnet.py
+│   ├── hybrid_inference.py
+│   └── utils.py
+├── web/
+│   ├── app.py
+│   ├── templates/
+│   └── static/
+├── results/
+│   ├── plots/
+│   ├── metrics/
+│   └── confusion_matrices/
+├── requirements.txt
+├── README.md
+└── LICENSE
 ```
 
-**Note**: The `dataset/` directory is not included due to size constraints. Download the dataset from PlantVillage or a similar source and place it in `data/dataset/`.
+## 🔧 Configuration
 
-## Prerequisites
+### Model Parameters
 
-- **Python**: 3.8 or higher
-- **Dependencies**: Listed in `requirements.txt`
-- **Dataset**: Leaf image dataset for training (e.g., PlantVillage)
-- **Hardware**: GPU recommended for model training
-- **Browser**: Chrome, Firefox, or Safari for web app
+**MobileNetV2**
+- Learning Rate: 0.0001
+- Optimizer: Adam
+- Loss: Categorical Crossentropy
+- Data Augmentation: Rotation, Shift, Shear, Zoom, Flip
 
-## Installation
+**EfficientNetB3**
+- Learning Rate: 0.0001 (initial), 0.00001 (fine-tuning)
+- Optimizer: Adam
+- Loss: Weighted Categorical Crossentropy
+- Class Weights: Computed for imbalanced classes
 
-1. **Clone the Repository**:
+## 🤖 API Integration
 
-   ```bash
-   git clone https://github.com/<your-username>/CropPredict.git
-   cd CropPredict
-   ```
+### Google Gemini API Setup
 
-2. **Create a Virtual Environment**:
+1. Get API key from [Google AI Studio](https://developers.google.com/gemini)
+2. Set environment variable: `GEMINI_API_KEY`
+3. The system automatically generates treatment recommendations based on disease classification
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+## 📈 Performance Metrics
 
-3. **Install Dependencies**:
+### Class-wise Performance (Top/Bottom performers)
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+**Best Performing Classes:**
+- Corn Healthy: 100% F1-score (both models)
+- Grape Healthy: 100% F1-score (both models)
+- Apple Black Rot: 99-100% F1-score
 
-   Example `requirements.txt`:
+**Challenging Classes:**
+- Tomato Early Blight: 79% (MobileNetV2), 90% (EfficientNetB3)
+- Tomato Target Spot: 81% (MobileNetV2), 91% (EfficientNetB3)
+- Corn Gray Leaf Spot: 80% (MobileNetV2), 90% (EfficientNetB3)
 
-   ```
-   flask==2.3.2
-   tensorflow==2.12.0
-   numpy==1.24.3
-   pillow==9.5.0
-   werkzeug==2.3.6
-   ```
+## 🎯 Use Cases
 
-4. **Download the Dataset**:
+- **Mobile Agriculture Apps**: Real-time disease detection on smartphones
+- **IoT Farm Monitoring**: Edge devices with cloud backup processing
+- **Agricultural Extension Services**: Professional diagnostic tools
+- **Research Applications**: Disease pattern analysis and monitoring
 
-   - Obtain the PlantVillage dataset or equivalent.
-   - Extract and place it in `data/dataset/` with subfolders for each crop and disease (e.g., `Tomato___Late_blight`, `Apple___healthy`).
+## 🚀 Deployment
 
-5. **Verify Model Files**:
+### Docker Deployment
+```bash
+docker build -t crop-disease-detector .
+docker run -p 5000:5000 -e GEMINI_API_KEY=your_key crop-disease-detector
+```
 
-   - Ensure `best_disease_model.keras` and `best_disease_model_b3.keras` are in `models/`.
-   - Alternatively, train models using `train_model.py` (see Model Training).
+### Cloud Deployment
+- Supports deployment on AWS, Google Cloud, Azure
+- Edge model optimized for mobile/IoT devices
+- Cloud model suitable for high-throughput processing
 
-## Model Training
+## 📚 Citation
 
-The project uses MobileNetV2 and EfficientNetB3 for disease classification. To train the models:
+If you use this work in your research, please cite our paper:
 
-1. **Prepare the Dataset**:
+```bibtex
+@article{bhardwaj2025hybrid,
+  title={Hybrid Edge–Cloud Crop Disease Diagnosis: MobileNetV2 and EfficientNetB3 for On-Device Detection with Generative AI Integration},
+  author={Bhardwaj, Aman and Bhardwaj, Jeet and Dhariwal, Sumit},
+  journal={[Journal Name]},
+  year={2025},
+  publisher={MDPI}
+}
+```
 
-   - Organize images in `data/dataset/` with subfolders for each class (e.g., `Tomato___Late_blight`).
-   - Example structure:
+## 🤝 Contributing
 
-     ```
-     data/dataset/
-     ├── Apple___healthy/
-     ├── Apple___Black_rot/
-     ├── Tomato___Late_blight/
-     ...
-     ```
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-2. **Run the Training Script**:
+## 📄 License
 
-   ```bash
-   python models/train_model.py
-   ```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-   - Update `train_model.py` with paths to your dataset and model output directory.
-   - Parameters (example):
-     - Batch size: 32
-     - Epochs: 50
-     - Image size: 224x224
-     - Optimizer: Adam
-     - Loss: Categorical Crossentropy
+## 👥 Authors
 
-3. **Output**:
+- **Aman Bhardwaj** - *Lead Developer* - [GitHub](https://github.com/GitHub-AmanBhardwaj)
+  - Email: whyamanbhardwaj@gmail.com
+- **Jeet Bhardwaj** - *Co-Developer* - Email: thejeetbhardwaj@gmail.com
+- **Sumit Dhariwal** - *Supervisor* - Email: sumitdhariwal22@gmail.com
 
-   - Trained models saved as `best_disease_model.keras` (MobileNetV2) and `best_disease_model_b3.keras` (EfficientNetB3) in `models/`.
+## 🏛️ Affiliation
 
-**Note**: Training requires significant computational resources. Use a GPU or cloud service (e.g., Google Colab) for faster results. Pre-trained models are provided for convenience.
+**Centre for AI, Madhav Institute of Technology and Science (MITS-DU), Gwalior, India**
 
-## Running the Flask App
+## 🙏 Acknowledgments
 
-1. **Set Environment Variables** (if applicable):
+- PlantVillage dataset creators
+- Google for Gemini API access
+- TensorFlow and Keras teams
+- Open source community
 
-   - For chatbot integration, set API keys (e.g., for Gemini API) in `app.py` or a `.env` file.
+## 📞 Support
 
-   ```bash
-   export GEMINI_API_KEY='your-api-key'  # On Windows: set GEMINI_API_KEY=your-api-key
-   ```
+For questions and support:
+- 📧 Email: whyamanbhardwaj@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/GitHub-AmanBhardwaj/Crop-Disease-detection/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/GitHub-AmanBhardwaj/Crop-Disease-detection/discussions)
 
-2. **Start the Flask App**:
-
-   ```bash
-   python app/app.py
-   ```
-
-   - The app runs on `http://localhost:8000` by default.
-
-3. **Directory Setup**:
-
-   - Ensure `static/uploads/` exists and is writable for image uploads.
-   - Verify `static/img/` contains images referenced in templates (e.g., `crop-field.jpg`, `ai-model.jpg`).
-
-## Usage
-
-1. **Access the Web App**:
-
-   - Open `http://localhost:8000` in a browser.
-   - Navigate to:
-     - **Home/Predict**: `/predict1` (MobileNetV2) or `/predict2` (EfficientNetB3) for image uploads.
-     - **Chatbot**: `/bot` for disease management advice.
-     - **About**: `/about` for project details.
-
-2. **Upload an Image**:
-
-   - On `/predict1` or `/predict2`, drag-and-drop or browse a leaf image (PNG, JPG, &lt;16MB).
-   - View prediction results (e.g., “Tomato___Late_blight (Confidence: 0.87)”).
-   - For non-healthy predictions, click “Prevention and Cure” for chatbot suggestions.
-
-3. **Interact with the Chatbot**:
-
-   - On `/bot`, ask questions about crop diseases or prevention (e.g., “How to treat Tomato Late Blight?”).
-   - Responses are generated using an AI model (e.g., Gemini).
-
-4. **Explore the About Page**:
-
-   - Learn about the project’s academic goals, technical approach (CNNs, dataset), and future plans.
-
-## Templates
-
-The `templates/` directory contains HTML files for the web app:
-
-- **predict.html**:
-  - Main page for uploading leaf images and viewing predictions.
-  - Features drag-and-drop, image preview, and prevention button.
-  - Endpoints: `/predict1` (MobileNetV2), `/predict2` (EfficientNetB3).
-- **about.html**:
-  - Describes the project’s purpose, technical approach, and future goals.
-  - Sections: Project Overview, Technical Approach, Future Goals.
-- **bot.html**:
-  - Interface for the chatbot, allowing users to query disease prevention and management.
-
-**Styling**:
-
-- Uses Font Awesome for icons and a custom CSS palette (`--primary-color: #4361ee`, `--dark-color: #212529`).
-- Responsive design with mobile-friendly navigation and layouts.
-
-## Contributing
-
-Contributions are welcome! To contribute:
-
-1. **Fork the Repository**:
-
-   ```bash
-   git clone https://github.com/<your-username>/CropPredict.git
-   ```
-
-2. **Create a Branch**:
-
-   ```bash
-   git checkout -b feature/your-feature
-   ```
-
-3. **Make Changes**:
-
-   - Add new features (e.g., model improvements, UI enhancements).
-   - Fix bugs (e.g., upload issues in `predict.html`).
-   - Update documentation.
-
-4. **Submit a Pull Request**:
-
-   - Push changes to your fork and create a PR with a clear description.
-
-**Guidelines**:
-
-- Follow Python PEP 8 style guidelines.
-- Test changes locally before submitting.
-- Document new features or changes in the README.
-
-**Known Issues**:
-
-- Second image upload in `predict.html` may fail due to form state persistence. Debugging logs (console, network, server) are needed to resolve this.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-## Acknowledgements
-
-- **Dataset**: PlantVillage for providing the leaf image dataset.
-- **Libraries**: TensorFlow, Flask, NumPy, Pillow, and Werkzeug.
-- **Inspiration**: Academic research in AI for agriculture.
-
----
-
-For questions or issues, open an issue on GitHub or contact the project maintainers. Happy researching!
+⭐ **Star this repository if you find it helpful!** ⭐
