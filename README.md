@@ -1,6 +1,9 @@
 # Crop Disease Detection: MobileNetV2 and EfficientNetB3 with Generative AI Integration
 
-[![Python 3.8+](https://img.shields.io/](https://img.shields.io/badgemg.shields.io/badge/Flask-2.0+-greenimg.shields.io/badge
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![TensorFlow 2.x](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This repository contains the **training notebooks**, **pre-trained models**, and **Flask web application** for crop disease detection research. The work demonstrates two different CNN architectures: **MobileNetV2** (designed for edge devices) and **EfficientNetB3** (designed for cloud processing), both integrated with **Google's Gemini API** for AI-generated treatment recommendations.
 
