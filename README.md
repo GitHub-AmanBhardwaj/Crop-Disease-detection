@@ -9,7 +9,7 @@
 
 This repository contains the **training notebooks**, **pre-trained models**, and **Flask web application** for crop disease detection research. The work demonstrates two different CNN architectures: **MobileNetV2** (designed for edge devices) and **EfficientNetB3** (designed for cloud processing), both integrated with **Google's Gemini API** for AI-generated treatment recommendations.
 
-**Note**: This repository contains the individual model components and a demonstration web application. The full hybrid edge-cloud implementation described in our research paper would require additional deployment infrastructure for production use.
+**Note**: This repository contains the individual model components and a demonstration web application. The full hybrid edge-cloud implementation described in our research paper would require additional deployment infrastructure for production use and the prototype code will be uploaded soon.
 
 ### 🎯 Key Features
 
