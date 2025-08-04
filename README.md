@@ -1,10 +1,10 @@
 # Crop Disease Detection: MobileNetV2 and EfficientNetB3 with Generative AI Integration
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www```thon.org/downloads/)
-[![TensorFlow 2.x](https://img.shields.io/badge/Tensor```w-2.x-orange.svg)](https://tensorflow.org/)
-[![Keras](https://img.shields.io/```ge/Keras-2.x-red.svg)](https://keras.io/)
-[![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
-[![NumPy](https://img.shields.io/badge/numpy```21+-blue.svg)](https://numpy.org/)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![TensorFlow 2.x](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://www.tensorflow.org/)
+[![Keras 2.x](https://img.shields.io/badge/Keras-2.x-red.svg)](https://keras.io/)
+[![Flask 2.0+](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![NumPy 1.21+](https://img.shields.io/badge/numpy-1.21+-blue.svg)](https://numpy.org/)
 
 
 This repository contains the **training notebooks**, **pre-trained models**, and **Flask web application** for crop disease detection research. The work demonstrates two different CNN architectures: **MobileNetV2** (designed for edge devices) and **EfficientNetB3** (designed for cloud processing), both integrated with **Google's Gemini API** for AI-generated treatment recommendations.
