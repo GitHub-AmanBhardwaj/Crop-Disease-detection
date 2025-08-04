@@ -1,8 +1,5 @@
 # Hybrid Edge-Cloud Crop Disease Diagnosis: MobileNetV2 and EfficientNetB3 for On-Device Detection with Generative AI Integration
 
-[
-[
-[![Flask](https://img.shields.io/badge/Flask-2.0+-greenerview
 
 This repository contains the implementation of a **Hybrid Edge-Cloud Crop Disease Diagnosis System** that combines the efficiency of on-device inference with the accuracy of cloud-based processing. The system uses **MobileNetV2** for lightweight edge detection and **EfficientNetB3** for high-accuracy cloud processing, integrated with **Google's Gemini API** for personalized treatment recommendations.
 
