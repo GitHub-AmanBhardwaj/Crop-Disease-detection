@@ -11,7 +11,7 @@ This repository contains the **training notebooks**, **pre-trained models**, and
 
 **Note**: This repository contains the individual model components and a demonstration web application. The full hybrid edge-cloud implementation described in our research paper would require additional deployment infrastructure for production use and the prototype code will be uploaded soon.
 
-### 🎯 Key Features
+### Key Features
 
 - **Two Trained Models**: MobileNetV2 (93.54% accuracy) and EfficientNetB3 (96.56% accuracy)
 - **Complete Training Pipeline**: Jupyter notebooks with full training code and analysis
@@ -19,7 +19,7 @@ This repository contains the **training notebooks**, **pre-trained models**, and
 - **AI-Powered Recommendations**: Flask app with Google Gemini API integration
 - **Ready-to-Use**: Pre-trained models and working web application included
 
-## 🌱 Dataset
+## Dataset
 
 **PlantVillage Dataset Subset**
 - **Total Images**: 32,962 colored leaf images
@@ -28,7 +28,7 @@ This repository contains the **training notebooks**, **pre-trained models**, and
 - **Split**: 64% Training, 16% Validation, 20% Testing
 - **Resolution**: 224×224 (MobileNetV2), 300×300 (EfficientNetB3)
 
-## 🏗️ Model Architectures
+## Model Architectures
 
 ### MobileNetV2 (Edge-Optimized)
 - **Input**: 224×224×3 RGB images
@@ -44,14 +44,14 @@ This repository contains the **training notebooks**, **pre-trained models**, and
 - **Parameters**: 12.90M (2.12M+ trainable)
 - **Training**: 25 epochs + 10 fine-tuning epochs, batch size 32
 
-## 📊 Results
+## Results
 
 | Model | Test Accuracy | Validation Accuracy | Test Loss | Weighted F1-Score |
 |-------|---------------|---------------------|-----------|-------------------|
 | MobileNetV2 | 93.54% | 93.42% | 0.1980 | 0.9356 |
 | EfficientNetB3 | 96.56% | 96.25% | 0.1029 | 0.9659 |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -77,7 +77,7 @@ pip install tensorflow flask numpy matplotlib seaborn scikit-learn pillow pandas
 export GEMINI_API_KEY="your_gemini_api_key_here"
 ```
 
-## 💻 Usage
+## Usage
 
 ### Running the Flask Web Application
 
@@ -98,7 +98,7 @@ jupyter notebook notebooks/MobileNetV2_Training.ipynb
 jupyter notebook notebooks/EfficientNetB3_Training.ipynb
 ```
 
-## 📁 Repository Contents
+## Repository Contents
 
 ```
 Crop-Disease-detection/
@@ -116,7 +116,7 @@ Crop-Disease-detection/
 └── README.md                            # This file
 ```
 
-## 🖥️ Flask Web Application
+## Flask Web Application
 
 The included Flask application demonstrates real-time crop disease detection:
 
@@ -126,7 +126,7 @@ The included Flask application demonstrates real-time crop disease detection:
 - **AI Recommendations**: Integrates with Google Gemini API for treatment advice
 - **User-Friendly Interface**: Simple web interface for easy interaction
 
-## 📈 Research Context
+## Research Context
 
 This repository supports our research on **"Hybrid Edge–Cloud Crop Disease Diagnosis"**. While the full hybrid implementation would require additional deployment infrastructure, this repository provides:
 
@@ -135,7 +135,7 @@ This repository supports our research on **"Hybrid Edge–Cloud Crop Disease Dia
 - **Demonstration Application**: Flask app showing practical implementation
 - **Performance Analysis**: Detailed evaluation of both approaches
 
-## 🎯 Use Cases
+## Use Cases
 
 - **Research Reproduction**: Use notebooks to reproduce our training results
 - **Model Comparison**: Compare edge vs cloud model architectures
@@ -155,39 +155,25 @@ GEMINI_API_KEY=your_gemini_api_key_here
 2. Set the environment variable
 3. The Flask app will generate treatment recommendations automatically
 
-## 📚 Citation
-
-If you use this work in your research, please cite our paper:
-
-```bibtex
-@article{bhardwaj2025hybrid,
-  title={Hybrid Edge–Cloud Crop Disease Diagnosis: MobileNetV2 and EfficientNetB3 for On-Device Detection with Generative AI Integration},
-  author={Bhardwaj, Aman and Bhardwaj, Jeet and Dhariwal, Sumit},
-  journal={[Journal Name]},
-  year={2025},
-  publisher={MDPI}
-}
-```
-
-## 👥 Authors
+## Authors
 
 - **Aman Bhardwaj** - *Lead Developer* - [GitHub](https://github.com/GitHub-AmanBhardwaj)
   - Email: whyamanbhardwaj@gmail.com
 - **Jeet Bhardwaj** - *Co-Developer* - Email: thejeetbhardwaj@gmail.com
 - **Sumit Dhariwal** - *Supervisor* - Email: sumitdhariwal22@gmail.com
 
-## 🏛️ Affiliation
+## Affiliation
 
 **Centre for AI, Madhav Institute of Technology and Science (MITS-DU), Gwalior, India**
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## Support
 
 For questions and support:
-- 📧 Email: whyamanbhardwaj@gmail.com
-- 🐛 Issues: [GitHub Issues](https://github.com/GitHub-AmanBhardwaj/Crop-Disease-detection/issues)
+- Email: whyamanbhardwaj@gmail.com
+- Issues: [GitHub Issues](https://github.com/GitHub-AmanBhardwaj/Crop-Disease-detection/issues)
 
-⭐ **Star this repository if you find it helpful!** ⭐
+⭐ **Star this repository if you find it helpful!** 
