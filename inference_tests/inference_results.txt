@@ -1,0 +1,71 @@
+_____________________________________________________________________________________
+
+		    Without GPU (inferred on Kaggle notebook)
+_____________________________________________________________________________________
+
+
+TensorFlow Version: 2.19.0
+GPU Available: False
+Loading MobileNetV2 from /kaggle/input/mymodels/best_disease_model.keras...
+--- Benchmarking MobileNetV2 ---
+Input Shape: (1, 224, 224, 3)
+Warming up... Done.
+Running 100 iterations...
+
+Results for MobileNetV2:
+  Average Latency: 286.06 ms
+  Std Deviation:   27.05 ms
+  Min / Max:       268.68 ms / 367.01 ms
+----------------------------------------
+Loading EfficientNetB3 from /kaggle/input/mymodels/best_disease_model_b3.keras...
+--- Benchmarking EfficientNetB3 ---
+Input Shape: (1, 300, 300, 3)
+Warming up... Done.
+Running 100 iterations...
+
+Results for EfficientNetB3:
+  Average Latency: 1117.41 ms
+  Std Deviation:   75.06 ms
+  Min / Max:       1074.29 ms / 1333.33 ms
+----------------------------------------
+
+SUMMARY:
+MobileNetV2 is 3.91x faster than EfficientNetB3.
+
+
+_____________________________________________________________________________________
+
+	 	With GPU (inferred on Kaggle's Nvidia P100 GPU)
+_____________________________________________________________________________________
+
+
+TensorFlow Version: 2.19.0
+GPU Available: True
+Loading MobileNetV2 from /kaggle/input/mymodels/best_disease_model.keras...
+--- Benchmarking MobileNetV2 ---
+Input Shape: (1, 224, 224, 3)
+Warming up... Done.
+Running 100 iterations...
+
+Results for MobileNetV2:
+  Average Latency: 61.34 ms
+  Std Deviation:   3.92 ms
+  Min / Max:       57.51 ms / 87.87 ms
+----------------------------------------
+Loading EfficientNetB3 from /kaggle/input/mymodels/best_disease_model_b3.keras...
+--- Benchmarking EfficientNetB3 ---
+Input Shape: (1, 300, 300, 3)
+Warming up... Done.
+Running 100 iterations...
+
+Results for EfficientNetB3:
+  Average Latency: 68.20 ms
+  Std Deviation:   3.00 ms
+  Min / Max:       63.99 ms / 81.38 ms
+----------------------------------------
+
+SUMMARY:
+MobileNetV2 is 1.11x faster than EfficientNetB3.
+
+
+
