@@ -1,6 +1,6 @@
 _____________________________________________________________________________________
 
-		    Without GPU (inferred on Kaggle notebook)
+		   			 Without GPU (inferred on Kaggle notebook)
 _____________________________________________________________________________________
 
 
@@ -35,7 +35,7 @@ MobileNetV2 is 3.91x faster than EfficientNetB3.
 
 _____________________________________________________________________________________
 
-	 	With GPU (inferred on Kaggle's Nvidia P100 GPU)
+	 			  With GPU (inferred on Kaggle's Nvidia P100 GPU)
 _____________________________________________________________________________________
 
 
@@ -66,6 +66,7 @@ Results for EfficientNetB3:
 
 SUMMARY:
 MobileNetV2 is 1.11x faster than EfficientNetB3.
+
 
 
 
